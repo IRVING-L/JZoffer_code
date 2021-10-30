@@ -19,24 +19,65 @@ struct TreeNode
 class Solution
 {
 public:
-    int dfs(TreeNode *root, int targetSum, unordered_map<int,int> mp, int path)
+    // int ans = 0;
+    // void dfs(TreeNode *node, int path, int targetSum)
+    // {
+    //     if (node == nullptr)
+    //         return;
+    //     path += node->val;
+    //     if (path == targetSum)
+    //         ++ans;
+    //     //L
+    //     dfs(node->left, path, targetSum);
+    //     //R
+    //     dfs(node->right, path, targetSum);
+
+    //     path -= node->val;
+    // }
+    // void func(TreeNode *root, int targetSum)
+    // {
+    //     if (root == nullptr)
+    //         return;
+    //     dfs(root, 0, targetSum);
+    //     func(root->left, targetSum);
+    //     func(root->right, targetSum);
+    // }
+    // int pathSum(TreeNode *root, int targetSum)
+    // {
+    //     func(root, targetSum);
+    //     return ans;
+    // }
+    //前缀和
+    int ans = 0;
+    unordered_map<int, int> hmp;
+    void dfs(TreeNode *node, int path, int targetSum)
     {
-        if(root = nullptr)
-            return 0;
-        //D
-        path += root->val;
-        
+        if (node == nullptr)
+            return;
+        path += node->val;
+        if (hmp.find(path - targetSum) != hmp.end())
+        {
+            ans += hmp[path - targetSum];
+        }
+        hmp[path]++;
+        dfs(node->left, path, targetSum);
+        dfs(node->right, path, targetSum);
+        hmp[path]--;
     }
 
     int pathSum(TreeNode *root, int targetSum)
     {
-        unordered_map<int, int> mp;
-        mp[0] = 1;
-        return dfs(root, targetSum, mp, 0);
+        hmp[0] = 1;
+        dfs(root, 0, targetSum);
+        return ans;
     }
 };
 
 int main(int argc, char const *argv[])
 {
+    TreeNode *node1 = new TreeNode(-3);
+    TreeNode *node2 = new TreeNode(-2, nullptr, node1);
+    Solution test;
+    cout << test.pathSum(node2, -2);
     return 0;
 }
