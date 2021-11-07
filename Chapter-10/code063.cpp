@@ -62,12 +62,6 @@ private:
         for (int i = 0; i < words.size(); ++i)
         {
             TrieNode *curr = head;
-            //如果第一个字符匹配不上，那就不用继续了
-            if (curr->next[words.front().front() - 'a'] == nullptr)
-            {
-                output += (words.front() + " ");
-                continue;
-            }
             string str;
             for (int j = 0; j < words[i].length(); ++j)
             {
@@ -80,10 +74,18 @@ private:
                         output += str + " ";
                         break;
                     }
+                    else if (j == words[i].length() - 1)
+                    {
+                        output += (words[i] + " ");
+                        break;
+                    }
                     curr = curr->next[ch - 'a'];
                 }
                 else
+                {
+                    output += (words[i] + " ");
                     break;
+                }
             }
         }
     }
@@ -91,6 +93,7 @@ private:
 public:
     string replaceWords(vector<string> &dictionary, string sentence)
     {
+        head = new TrieNode('#');
         //把字典放在前缀树中
         creatDicTree(dictionary);
         //把string的sentence单词分离出来
@@ -106,9 +109,12 @@ public:
             }
             str += sentence[i];
         }
+        if (!str.empty())
+            words.emplace_back(str);
         //把每一个单词在字典树中进行比较，没有就返回原单词，有的就返回第一个能比较的
         string ret;
         checkWords(words, ret);
+        ret.erase(ret.length());
         return ret;
     }
 };
@@ -116,8 +122,8 @@ public:
 int main(int argc, char const *argv[])
 {
     vector<string> dic{"cat", "bat", "rat"};
-    string sentence = "the cattle was rattled by the battery";
+    string sentence = "r cattle was rattled by the battery";
     Solution test;
-    test.replaceWords(dic, sentence);
+    cout << test.replaceWords(dic, sentence);
     return 0;
 }
