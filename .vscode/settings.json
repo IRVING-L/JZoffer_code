@@ -42,6 +42,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "complex": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "unordered_set": "cpp"
     }
 }
