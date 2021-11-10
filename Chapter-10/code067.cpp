@@ -17,13 +17,10 @@ class Solution
 private:
     struct TrieNode
     {
-        bool val;
         TrieNode *next[2];
         //构造函数
-        TrieNode() {}
-        TrieNode(bool x)
+        TrieNode()
         {
-            val = x;
             for (int i = 0; i < 2; ++i)
                 next[i] = nullptr;
         }
@@ -36,64 +33,59 @@ private:
         {
             TrieNode *curr = head;
             int num = nums[i];
-            for (int j =31; j >= 0; --j)
+            for (int j = 31; j >= 0; --j)
             {
-                bool bitValue = (num >> j) & 1;
+                int bitValue = (num >> j) & 1;
                 if (curr->next[bitValue] == nullptr)
                 {
-                    TrieNode *data = new TrieNode(bitValue);
+                    TrieNode *data = new TrieNode();
                     curr->next[bitValue] = data;
                 }
                 curr = curr->next[bitValue];
             }
         }
     }
-    void findMax(int &num)
+    int findMax(vector<int> &nums)
     {
-        TrieNode *curr = head;
-        queue<TrieNode *> q;
-        for (int i = 0; i < 2; ++i)
+        int maxValue = INT32_MIN;
+        for (int i = 0; i < nums.size(); ++i)
         {
-            if (curr->next[i] != nullptr)
-                q.push(curr->next[i]);
-        }
-        while (!q.empty())
-        {
-            num = num << 1;
-            int sz = q.size();
-            bool flag = q.front()->val;
-            int carry = 0;
-            for (int i = 0; i < sz; ++i)
+            int num = nums[i];
+            int ans = 0;
+            //让nums中的每一个数，都去字典树中遍历一遍
+            TrieNode *curr = head;
+            for (int j = 31; j >= 0; --j)
             {
-                TrieNode *data = q.front();
-                q.pop();
-                if (!carry && flag != data->val)
-                    carry = 1;
-                
-                if (data->next[0] != nullptr)
-                    q.push(data->next[0]);
-                if (data->next[1] != nullptr)
-                    q.push(data->next[1]);
-                
+                int bitValue = (num >> j) & 1;
+                if (curr->next[1 - bitValue] != nullptr)
+                {
+                    //存在和num当前位相反的
+                    ans = ans | (1 << j);
+                    curr = curr->next[1 - bitValue];
+                }
+                else
+                {
+                    curr = curr->next[bitValue];
+                }
             }
-            num += carry;
+            maxValue = max(maxValue, ans);
         }
+        return maxValue;
     }
 
 public:
     int findMaximumXOR(vector<int> &nums)
     {
-        head = new TrieNode(false);
+        head = new TrieNode();
         biuldBitTree(nums);
-        int ret = 0;
-        findMax(ret);
-        return ret;
+        return findMax(nums);
     }
 };
 int main(int argc, char const *argv[])
 {
     Solution test;
-    vector<int> nums{3,10,5,25,2,8};
+    vector<int> nums{14, 70, 53, 83, 49, 91, 36, 80, 92, 51, 66, 70};
     cout << test.findMaximumXOR(nums);
+    cout << (2 | 1) <<endl;
     return 0;
 }
