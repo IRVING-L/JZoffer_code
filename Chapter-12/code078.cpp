@@ -57,15 +57,20 @@ private:
         }
         return retList->next;
     }
+    ListNode *mergeSortLists(vector<ListNode *> &lists, int left, int right)
+    {
+        //首先，需要明确的是，这个函数是一个递归
+
+        //我们从容器中，分别取出，要排序的两个链表
+        ListNode *l = lists[left];
+        ListNode *r = lists[right];
+
+        //调用函数，合并两个有序链表
+        ListNode *sortedList = mergeTwoList(l,r);
+    }
 public:
     ListNode *mergeKLists(vector<ListNode *> &lists)
     {
-        ListNode *left = nullptr;
-        for(int i=0;i<lists.size();++i)
-        {
-            ListNode *right = lists[i];
-            left = mergeTwoList(left,right);
-        }
-        return left;
+        
     }
 };
