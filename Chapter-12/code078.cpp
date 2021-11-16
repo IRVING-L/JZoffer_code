@@ -69,7 +69,7 @@ private:
         //如果left大于right了，怎么处理
         if(left > right)
         {
-            return lists[right];
+            return nullptr;
         }
         int mid = (left + right) >> 1;
         ListNode *sortedList1 = mergeSortLists(lists, left, mid);
@@ -81,6 +81,6 @@ private:
 public:
     ListNode *mergeKLists(vector<ListNode *> &lists)
     {
-        return mergeSortLists(lists, 0, lists.size());
+        return mergeSortLists(lists, 0, lists.size()-1);
     }
 };
