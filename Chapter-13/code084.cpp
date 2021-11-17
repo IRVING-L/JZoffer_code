@@ -40,17 +40,17 @@ private:
             ret.emplace_back(nums);
             return;
         }
-        int reg = 999; //设置为999保证不是集合中的元素
+        vector<int> hsCheck(25);
         for (int i = startIndex; i < nums.size(); ++i)
         {
             //先处理这一层元素的重复性
-            if (nums[i] == reg)
+            if (hsCheck[nums[i]+10])
             {
                 continue;
             }
             else
             {
-                reg = nums[i];
+                hsCheck[nums[i]+10] = 1;
                 swap(nums, i, startIndex);
                 dfs(startIndex + 1, nums);
                 swap(nums, i, startIndex);
@@ -59,7 +59,7 @@ private:
     }
 
 public:
-    vector<vector<int>> permute(vector<int> &nums)
+    vector<vector<int>> permuteUnique(vector<int> &nums)
     {
         ret.clear();
         sort(nums.begin(), nums.end());
