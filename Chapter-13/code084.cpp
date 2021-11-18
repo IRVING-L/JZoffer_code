@@ -32,7 +32,7 @@ private:
         nums[i] = nums[j];
         nums[j] = tmp;
     }
-    void dfs(int startIndex, vector<int> &nums)
+    void backtrack(int startIndex, vector<int> &nums)
     {
         //终止条件
         if (startIndex == nums.size())
@@ -40,19 +40,16 @@ private:
             ret.emplace_back(nums);
             return;
         }
-        vector<int> hsCheck(25);
+        
+        set<int> hsCheck;
         for (int i = startIndex; i < nums.size(); ++i)
         {
             //先处理这一层元素的重复性
-            if (hsCheck[nums[i]+10])
+            if (!hsCheck.count(nums[i]))
             {
-                continue;
-            }
-            else
-            {
-                hsCheck[nums[i]+10] = 1;
+                hsCheck.insert(nums[i]);
                 swap(nums, i, startIndex);
-                dfs(startIndex + 1, nums);
+                backtrack(startIndex + 1, nums);
                 swap(nums, i, startIndex);
             }
         }
@@ -63,7 +60,7 @@ public:
     {
         ret.clear();
         sort(nums.begin(), nums.end());
-        dfs(0, nums);
+        backtrack(0, nums);
         return ret;
     }
 };
