@@ -36,22 +36,27 @@ private:
     struct Vertex
     {
         string v;
-        float edge;
+        double edge;
+        Vertex(){};
+        Vertex(string str, double x) : v(str), edge(x) {}
     };
-    map<string,vector<Vertex>> Map;
+    map<string, vector<Vertex>> Map;
     void biuldMap(vector<vector<string>> &equations,
-     vector<double> &values)
+                  vector<double> &values)
     {
-        for(int i=0;i<equations.size();++i)
+        for (int i = 0; i < equations.size(); ++i)
         {
             string v1 = equations[i][0];
             string v2 = equations[i][1];
-            float result
+            double result = values[i];
+            Map[v1].push_back(Vertex(v2, result));
+            Map[v2].push_back(Vertex(v1, 1 / result));
         }
     }
+
 public:
     vector<double> calcEquation(vector<vector<string>> &equations,
-     vector<double> &values, vector<vector<string>> &queries)
+                                vector<double> &values, vector<vector<string>> &queries)
     {
     }
 };
